@@ -1,2 +1,2 @@
-# zk-demo
-ZooKeeper demo project
+# queue-demo
+Queue system demo project
