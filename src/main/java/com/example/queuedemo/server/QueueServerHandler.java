@@ -1,6 +1,9 @@
-package com.example.queuedemo.transport;
+package com.example.queuedemo.server;
 
 import com.example.queuedemo.role.Role;
+import com.example.queuedemo.transport.PubRequest;
+import com.example.queuedemo.transport.PullRequest;
+import com.example.queuedemo.transport.TLVData;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -21,17 +24,17 @@ public class QueueServerHandler extends SimpleChannelInboundHandler<Object> {
 		if( o instanceof PubRequest){
 			PubRequest request = (PubRequest)o;
 			//具体的业务处理代码，此处简化
-			Response response = role.pub(request);
-			channelHandlerContext.writeAndFlush(response);
+			TLVData data = role.pub(request);
+			channelHandlerContext.writeAndFlush(data);
 			return;
 		}
 
 		if( o instanceof PullRequest){
 			PullRequest request = (PullRequest)o;
-			//具体的业务处理代码，此处简化
-			Response response = role.pull(request);
-			channelHandlerContext.writeAndFlush(response);
 
+			//具体的业务处理代码，此处简化
+			TLVData data = role.pull(request);
+			channelHandlerContext.writeAndFlush(data);
 			return;
 		}
 

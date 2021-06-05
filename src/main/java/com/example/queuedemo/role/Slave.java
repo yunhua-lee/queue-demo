@@ -2,7 +2,7 @@ package com.example.queuedemo.role;
 
 import com.example.queuedemo.transport.PubRequest;
 import com.example.queuedemo.transport.PullRequest;
-import com.example.queuedemo.transport.Response;
+import com.example.queuedemo.transport.TLVData;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
@@ -30,6 +30,9 @@ public class Slave extends AbstractRole{
 				if(event.getType().equals(PathChildrenCacheEvent.Type.CONNECTION_RECONNECTED)) {
 					if(register()){
 						System.out.println("slave started!");
+						if(client.checkExists().forPath(masterNodePath) == null){
+							active();
+						}
 					}else{
 						deactive();
 						System.out.println("slave failed to start because register ZooKeeper failed!");
@@ -77,26 +80,30 @@ public class Slave extends AbstractRole{
 
 	@Override
 	public boolean isActive() {
-		return false;
+		return roleActived;
 	}
 
 	@Override
-	public Response pub(PubRequest request) {
+	public TLVData pub(PubRequest request) {
+		System.out.println("got one pub request, timestamp: " + System.currentTimeMillis());
+
 		String message = "sorry, I'm slave!";
-		Response response = new Response((byte) '2', message.length(), message);
-		return response;
+		TLVData TLVData = new TLVData((byte) '2', message.length(), message);
+		return TLVData;
 	}
 
 	@Override
-	public Response pull(PullRequest request) {
+	public TLVData pull(PullRequest request) {
+		System.out.println("got one pull request, timestamp: " + System.currentTimeMillis());
+
 		if(isActive()) {
 			String message = "hello, world!(from slave)";
-			Response response = new Response((byte) '4', message.length(), message);
-			return response;
+			TLVData TLVData = new TLVData((byte) '4', message.length(), message);
+			return TLVData;
 		}else{
-			String message = "sorry, I'm inactive!";
-			Response response = new Response((byte) '4', message.length(), message);
-			return response;
+			String message = "sorry, I'm inactive!(slave)";
+			TLVData TLVData = new TLVData((byte) '4', message.length(), message);
+			return TLVData;
 		}
 	}
 }

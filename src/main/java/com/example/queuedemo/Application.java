@@ -3,15 +3,13 @@ package com.example.queuedemo;
 import com.example.queuedemo.role.Master;
 import com.example.queuedemo.role.Role;
 import com.example.queuedemo.role.Slave;
-import com.example.queuedemo.transport.QueueServerInitializer;
+import com.example.queuedemo.server.QueueServerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
 import org.apache.commons.cli.*;
 
 /**
@@ -25,6 +23,7 @@ public class Application {
 
 		CommandLine cmd = parseOptions(args, buildOptions());
 
+		//parse options
 		String systemName = "";
 		if(cmd.hasOption("S")) {
 			systemName = cmd.getOptionValue('S');
@@ -57,6 +56,7 @@ public class Application {
 			port = Integer.valueOf(cmd.getOptionValue('p'));
 		}
 
+		//build role
 		Role role;
 		if(cmd.hasOption('m')) {
 			role = new Master(systemName, groupName, zkAddr);
@@ -71,7 +71,7 @@ public class Application {
 
 		role.start();
 
-		// Configure the server.
+		//build netty server.
 		EventLoopGroup bossGroup = new NioEventLoopGroup(1);
 		EventLoopGroup workerGroup = new NioEventLoopGroup(8);
 		try {
@@ -79,7 +79,6 @@ public class Application {
 			b.option(ChannelOption.SO_BACKLOG, 1024);
 			b.group(bossGroup, workerGroup)
 					.channel(NioServerSocketChannel.class)
-					.handler(new LoggingHandler(LogLevel.INFO))
 					.childHandler(new QueueServerInitializer(role));
 
 			Channel ch = b.bind(port).sync().channel();
@@ -93,12 +92,12 @@ public class Application {
 	private static Options buildOptions(){
 		final Options options = new Options();
 
-		options.addOption("p", true, "server port");     //port
-		options.addOption("m", "node is master");  //master
-		options.addOption("s", "node is slave");   //slave
+		options.addOption("p", true, "server port");       //port
+		options.addOption("m", "node is master");                 //master
+		options.addOption("s", "node is slave");                  //slave
 		options.addOption("z", true, "ZooKeeper address"); //zk address
-		options.addOption("S", true, "system name"); //system name
-		options.addOption("g", true, "group name"); //group name
+		options.addOption("S", true, "system name");       //system name
+		options.addOption("g", true, "group name");        //group name
 
 		return options;
 	}
@@ -109,7 +108,7 @@ public class Application {
 
 		try {
 			cmd = parser.parse(options, args);
-		} catch (final ParseException e) {
+		} catch (ParseException e) {
 			throw new Exception("parser command line error",e);
 		}
 

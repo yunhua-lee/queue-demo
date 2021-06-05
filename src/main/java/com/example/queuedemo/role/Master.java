@@ -2,7 +2,7 @@ package com.example.queuedemo.role;
 
 import com.example.queuedemo.transport.PubRequest;
 import com.example.queuedemo.transport.PullRequest;
-import com.example.queuedemo.transport.Response;
+import com.example.queuedemo.transport.TLVData;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;
 import org.apache.curator.framework.state.ConnectionStateListener;
@@ -26,7 +26,6 @@ public class Master extends AbstractRole{
 
 	@Override
 	public void start() throws Exception {
-
 		client.getConnectionStateListenable().addListener(new ConnectionStateListener() {
 			@Override
 			public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
@@ -70,28 +69,32 @@ public class Master extends AbstractRole{
 	}
 
 	@Override
-	public Response pub(PubRequest request) {
+	public TLVData pub(PubRequest request) {
+		System.out.println("got one pub request, timestamp: " + System.currentTimeMillis());
+
 		if(isActive()) {
 			String message = "got it";
-			Response response = new Response((byte) '2', message.length(), message);
-			return response;
+			TLVData TLVData = new TLVData((byte) '2', message.length(), message);
+			return TLVData;
 		}else{
 			String message = "sorry, I'm inactive!";
-			Response response = new Response((byte) '2', message.length(), message);
-			return response;
+			TLVData TLVData = new TLVData((byte) '2', message.length(), message);
+			return TLVData;
 		}
 	}
 
 	@Override
-	public Response pull(PullRequest request) {
+	public TLVData pull(PullRequest request) {
+		System.out.println("got one pull request, timestamp: " + System.currentTimeMillis());
+
 		if(isActive()) {
 			String message = "hello, world!(from master)";
-			Response response = new Response((byte) '4', message.length(), message);
-			return response;
+			TLVData TLVData = new TLVData((byte) '4', message.length(), message);
+			return TLVData;
 		}else{
 			String message = "sorry, I'm inactive!";
-			Response response = new Response((byte) '4', message.length(), message);
-			return response;
+			TLVData TLVData = new TLVData((byte) '4', message.length(), message);
+			return TLVData;
 		}
 	}
 }

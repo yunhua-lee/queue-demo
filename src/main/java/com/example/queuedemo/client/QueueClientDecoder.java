@@ -1,5 +1,6 @@
-package com.example.queuedemo.transport;
+package com.example.queuedemo.client;
 
+import com.example.queuedemo.transport.TLVData;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
@@ -9,14 +10,15 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
  * @Author wallace
  * @Date 2021/6/4
  */
-public class QueueServerDecoder extends LengthFieldBasedFrameDecoder {
+public class QueueClientDecoder extends LengthFieldBasedFrameDecoder {
 
 	private static final int HEADER_SIZE = 5;
+
 	private byte cmd;
 	private int length;
 	private String msgBody;
 
-	public QueueServerDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, int lengthAdjustment, int initialBytesToStrip) {
+	public QueueClientDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, int lengthAdjustment, int initialBytesToStrip) {
 		super(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip);
 	}
 
@@ -31,7 +33,7 @@ public class QueueServerDecoder extends LengthFieldBasedFrameDecoder {
 		}
 
 		cmd = in.readByte();
-		length = in.readInt(); //readByte ?
+		length = in.readInt();
 
 		if(in.readableBytes() < length){
 			throw new Exception("invalid message, required length:" + length
@@ -42,12 +44,6 @@ public class QueueServerDecoder extends LengthFieldBasedFrameDecoder {
 		in.readBytes(bytes);
 		String body = new String(bytes,"UTF-8");
 
-		if(cmd == '1'){
-			return new PubRequest(body);
-		}else if(cmd == '3'){
-			return new PullRequest(body);
-		}else {
-			throw new Exception("invalid message, cmd: " + cmd);
-		}
+		return new TLVData(cmd, length, body);
 	}
 }

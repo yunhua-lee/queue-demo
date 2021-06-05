@@ -16,13 +16,13 @@ package com.example.queuedemo.role;/*
 
 import com.example.queuedemo.transport.PubRequest;
 import com.example.queuedemo.transport.PullRequest;
-import com.example.queuedemo.transport.Response;
+import com.example.queuedemo.transport.TLVData;
 
 public interface Role {
 	void start() throws Exception;
 	void active();
 	void deactive();
 	boolean isActive();
-	Response pub(PubRequest request);
-	Response pull(PullRequest request);
+	TLVData pub(PubRequest request);
+	TLVData pull(PullRequest request);
 }

@@ -1,6 +1,7 @@
-package com.example.queuedemo.transport;
+package com.example.queuedemo.server;
 
 import com.example.queuedemo.role.Role;
+import com.example.queuedemo.transport.TLVData;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -12,11 +13,6 @@ import io.netty.channel.socket.SocketChannel;
  */
 public class QueueServerInitializer extends ChannelInitializer<SocketChannel> {
 
-	private static final int MAX_FRAME_LENGTH = 1024 * 1024;
-	private static final int LENGTH_FIELD_LENGTH = 4;
-	private static final int LENGTH_FIELD_OFFSET = 1;
-	private static final int LENGTH_ADJUSTMENT = 0;
-	private static final int INITIAL_BYTES_TO_STRIP = 0;
 
 	private final Role role;
 
@@ -28,9 +24,9 @@ public class QueueServerInitializer extends ChannelInitializer<SocketChannel> {
 	protected void initChannel(SocketChannel socketChannel) throws Exception {
 		ChannelPipeline p = socketChannel.pipeline();
 
-		p.addLast(new QueueServerDecoder(MAX_FRAME_LENGTH, LENGTH_FIELD_LENGTH,
-				LENGTH_FIELD_OFFSET, LENGTH_ADJUSTMENT, INITIAL_BYTES_TO_STRIP));
-		p.addLast(new QueueServerHandler(role));
+		p.addLast(new QueueServerDecoder(TLVData.MAX_FRAME_LENGTH, TLVData.LENGTH_FIELD_LENGTH,
+				TLVData.LENGTH_FIELD_OFFSET, TLVData.LENGTH_ADJUSTMENT, TLVData.INITIAL_BYTES_TO_STRIP));
 		p.addLast(new QueueServerEncoder());
+		p.addLast(new QueueServerHandler(role));
 	}
 }
