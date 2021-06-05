@@ -75,7 +75,6 @@ public class ClientDemo {
 					}
 					request = new TLVData((byte) '3', 1, "1");
 				}else if("bye".equals(cmd[0].toLowerCase())) {
-					future.channel().closeFuture().sync();
 					break;
 				}else {
 					System.out.println("invalid command, example: \"pub hello\", or \"pull\"");
@@ -83,20 +82,14 @@ public class ClientDemo {
 				}
 
 				lastWriteFuture = future.channel().writeAndFlush(request);
-				// If user typed the 'bye' command, wait until the server closes
-				// the connection.
-				if ("bye".equals(line.toLowerCase())) {
-					future.channel().closeFuture().sync();
-					break;
-				}
 			}
 
 			// Wait until all messages are flushed before closing the channel.
 			if (lastWriteFuture != null) {
 				lastWriteFuture.sync();
 			}
+			future.channel().close();
 
-			future.channel().closeFuture().sync();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
