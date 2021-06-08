@@ -14,8 +14,8 @@ package com.example.queuedemo.role;/*
  *  under the License.
  */
 
-import com.example.queuedemo.transport.PubRequest;
-import com.example.queuedemo.transport.PullRequest;
+import com.example.queuedemo.server.PubRequest;
+import com.example.queuedemo.server.PullRequest;
 import com.example.queuedemo.transport.TLVData;
 
 public interface Role {

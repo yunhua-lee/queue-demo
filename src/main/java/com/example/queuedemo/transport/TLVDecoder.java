@@ -1,6 +1,5 @@
-package com.example.queuedemo.client;
+package com.example.queuedemo.transport;
 
-import com.example.queuedemo.transport.TLVData;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
@@ -10,15 +9,11 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
  * @Author wallace
  * @Date 2021/6/4
  */
-public class QueueClientDecoder extends LengthFieldBasedFrameDecoder {
+public class TLVDecoder extends LengthFieldBasedFrameDecoder {
 
 	private static final int HEADER_SIZE = 5;
 
-	private byte cmd;
-	private int length;
-	private String msgBody;
-
-	public QueueClientDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, int lengthAdjustment, int initialBytesToStrip) {
+	public TLVDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength, int lengthAdjustment, int initialBytesToStrip) {
 		super(maxFrameLength, lengthFieldOffset, lengthFieldLength, lengthAdjustment, initialBytesToStrip);
 	}
 
@@ -27,6 +22,10 @@ public class QueueClientDecoder extends LengthFieldBasedFrameDecoder {
 		if(in == null){
 			return null;
 		}
+
+		byte cmd;
+		int length;
+		String msgBody;
 
 		if(in.readableBytes() < HEADER_SIZE){
 			throw new Exception("invalid message");

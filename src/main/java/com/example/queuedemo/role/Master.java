@@ -1,7 +1,7 @@
 package com.example.queuedemo.role;
 
-import com.example.queuedemo.transport.PubRequest;
-import com.example.queuedemo.transport.PullRequest;
+import com.example.queuedemo.server.PubRequest;
+import com.example.queuedemo.server.PullRequest;
 import com.example.queuedemo.transport.TLVData;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.state.ConnectionState;

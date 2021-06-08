@@ -1,6 +1,5 @@
-package com.example.queuedemo.client;
+package com.example.queuedemo.transport;
 
-import com.example.queuedemo.transport.TLVData;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -12,7 +11,7 @@ import java.nio.charset.Charset;
  * @Author wallace
  * @Date 2021/6/4
  */
-public class QueueClientEncoder extends MessageToByteEncoder<TLVData> {
+public class TLVEncoder extends MessageToByteEncoder<TLVData> {
 	@Override
 	protected void encode(ChannelHandlerContext channelHandlerContext, TLVData request, ByteBuf byteBuf) throws Exception {
 		byteBuf.writeByte(request.getCmdCode());

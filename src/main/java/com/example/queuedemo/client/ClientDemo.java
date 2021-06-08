@@ -89,7 +89,6 @@ public class ClientDemo {
 				lastWriteFuture.sync();
 			}
 			future.channel().close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {

@@ -2,6 +2,8 @@ package com.example.queuedemo.server;
 
 import com.example.queuedemo.role.Role;
 import com.example.queuedemo.transport.TLVData;
+import com.example.queuedemo.transport.TLVDecoder;
+import com.example.queuedemo.transport.TLVEncoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -24,9 +26,9 @@ public class QueueServerInitializer extends ChannelInitializer<SocketChannel> {
 	protected void initChannel(SocketChannel socketChannel) throws Exception {
 		ChannelPipeline p = socketChannel.pipeline();
 
-		p.addLast(new QueueServerDecoder(TLVData.MAX_FRAME_LENGTH, TLVData.LENGTH_FIELD_LENGTH,
+		p.addLast(new TLVDecoder(TLVData.MAX_FRAME_LENGTH, TLVData.LENGTH_FIELD_LENGTH,
 				TLVData.LENGTH_FIELD_OFFSET, TLVData.LENGTH_ADJUSTMENT, TLVData.INITIAL_BYTES_TO_STRIP));
-		p.addLast(new QueueServerEncoder());
+		p.addLast(new TLVEncoder());
 		p.addLast(new QueueServerHandler(role));
 	}
 }

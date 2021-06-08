@@ -116,7 +116,7 @@ public class Application {
 	}
 
 	private static void usage(){
-		System.out.println("Usage: \n java -jar queueDemo.jar -p {port} -s {system name} -g {group name} -z {zookeeper address} -m/-s (master/slave) ");
+		System.out.println("Usage: \n java -jar queueDemo.jar -p {port} -S {system name} -g {group name} -z {zookeeper address} -m/-s (master/slave) ");
 	}
 
 }
