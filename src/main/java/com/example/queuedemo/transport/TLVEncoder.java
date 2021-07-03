@@ -13,9 +13,9 @@ import java.nio.charset.Charset;
  */
 public class TLVEncoder extends MessageToByteEncoder<TLVData> {
 	@Override
-	protected void encode(ChannelHandlerContext channelHandlerContext, TLVData request, ByteBuf byteBuf) throws Exception {
-		byteBuf.writeByte(request.getCmdCode());
-		byteBuf.writeInt(request.getBodyLength());
-		byteBuf.writeBytes(request.getBody().getBytes(Charset.forName("utf-8")));
+	protected void encode(ChannelHandlerContext channelHandlerContext, TLVData data, ByteBuf byteBuf) throws Exception {
+		byteBuf.writeByte(data.getCmdCode());
+		byteBuf.writeInt(data.getBodyLength());
+		byteBuf.writeBytes(data.getBody().getBytes(Charset.forName("utf-8")));
 	}
 }
