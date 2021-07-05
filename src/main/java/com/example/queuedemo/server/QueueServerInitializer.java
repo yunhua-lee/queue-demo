@@ -16,19 +16,19 @@ import io.netty.channel.socket.SocketChannel;
 public class QueueServerInitializer extends ChannelInitializer<SocketChannel> {
 
 
-	private final Role role;
+    private final Role role;
 
-	public QueueServerInitializer(Role role){
-		this.role = role;
-	}
+    public QueueServerInitializer(Role role){
+        this.role = role;
+    }
 
-	@Override
-	protected void initChannel(SocketChannel socketChannel) throws Exception {
-		ChannelPipeline p = socketChannel.pipeline();
+    @Override
+    protected void initChannel(SocketChannel socketChannel) throws Exception {
+        ChannelPipeline p = socketChannel.pipeline();
 
-		p.addLast(new TLVDecoder(TLVData.MAX_FRAME_LENGTH, TLVData.LENGTH_FIELD_LENGTH,
-				TLVData.LENGTH_FIELD_OFFSET, TLVData.LENGTH_ADJUSTMENT, TLVData.INITIAL_BYTES_TO_STRIP));
-		p.addLast(new TLVEncoder());
-		p.addLast(new QueueServerHandler(role));
-	}
+        p.addLast(new TLVDecoder(TLVData.MAX_FRAME_LENGTH, TLVData.LENGTH_FIELD_LENGTH,
+                TLVData.LENGTH_FIELD_OFFSET, TLVData.LENGTH_ADJUSTMENT, TLVData.INITIAL_BYTES_TO_STRIP));
+        p.addLast(new TLVEncoder());
+        p.addLast(new QueueServerHandler(role));
+    }
 }

@@ -19,10 +19,10 @@ import com.example.queuedemo.server.PullRequest;
 import com.example.queuedemo.transport.TLVData;
 
 public interface Role {
-	void start() throws Exception;
-	void active();
-	void deactive();
-	boolean isActive();
-	TLVData pub(PubRequest request);
-	TLVData pull(PullRequest request);
+    void start() throws Exception;
+    void active();
+    void deactive();
+    boolean isActive();
+    TLVData pub(PubRequest request);
+    TLVData pull(PullRequest request);
 }
