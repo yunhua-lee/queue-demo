@@ -14,17 +14,17 @@ import static com.example.queuedemo.transport.TLVData.*;
  * @Date 2021/6/4
  */
 public class QueueClientInitializer extends ChannelInitializer<SocketChannel> {
-	public QueueClientInitializer(){
-	}
+    public QueueClientInitializer(){
+    }
 
-	@Override
-	protected void initChannel(SocketChannel socketChannel) throws Exception {
-		ChannelPipeline p = socketChannel.pipeline();
+    @Override
+    protected void initChannel(SocketChannel socketChannel) throws Exception {
+        ChannelPipeline p = socketChannel.pipeline();
 
-		p.addLast(new TLVEncoder());
-		p.addLast(new TLVDecoder(MAX_FRAME_LENGTH, LENGTH_FIELD_LENGTH,
-				LENGTH_FIELD_OFFSET, LENGTH_ADJUSTMENT, INITIAL_BYTES_TO_STRIP));
-		p.addLast(new QueueClientHandler());
+        p.addLast(new TLVEncoder());
+        p.addLast(new TLVDecoder(MAX_FRAME_LENGTH, LENGTH_FIELD_LENGTH,
+                LENGTH_FIELD_OFFSET, LENGTH_ADJUSTMENT, INITIAL_BYTES_TO_STRIP));
+        p.addLast(new QueueClientHandler());
 
-	}
+    }
 }
